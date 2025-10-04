@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="maia-removebg-preview.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAIA AI - Recycling Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #0b0c10;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 50px;
+      box-sizing: border-box;
+      position: absolute;
+      top: 0;
+      background: #0b0c10;
+      border-bottom: 1px solid #1f2833;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: #fc6500;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #b9530f;
+    }
+
+    h1 {
+      margin-top: 100px;
+      color: #fc6500;
+      font-size: 2.5rem;
+    }
+
+    .subtitle {
+      color: #c5c6c7;
+      margin-bottom: 30px;
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .chat-container {
+  width: 1200px;  /* Increased from 600px */
+  height: 900px; /* Increased from 400px */
+  background: #1f2833;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      line-height: 1.4;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: #fc6500;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .ai-message {
+      align-self: flex-start;
+      background: #2a3542;
+      color: #c5c6c7;
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-input-container {
+      display: flex;
+      padding: 15px;
+      background: #1a2029;
+      border-top: 1px solid #2a3542;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-upload-btn {
+      background: #2a3542;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+      color: #fc6500;
+      font-size: 18px;
+    }
+
+    .file-upload-btn:hover {
+      background: #3a4552;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 25px;
+      background: #2a3542;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .send-button {
+      background: #fc6500;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+      color: white;
+      font-size: 16px;
+    }
+
+    .send-button:hover {
+      background: #b9530f;
+    }
+
+    .send-button:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+
+    .typing-indicator {
+      display: none;
+      color: #fc6500;
+      padding: 12px 16px;
+      align-self: flex-start;
+    }
+
+    .typing-indicator span {
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0; }
+      30% { opacity: 1; }
+    }
+
+    .features {
+      display: flex;
+      gap: 20px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .feature-card {
+      background: #1f2833;
+      border-radius: 10px;
+      padding: 20px;
+      width: 180px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      color: #fc6500;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: #c5c6c7;
+    }
+
+    footer {
+      margin-top: 50px;
+      color: #5d6470;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .file-info {
+      color: #c5c6c7;
+      font-size: 12px;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .upload-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-preview {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .upload-status {
+      color: #4ade80;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* Typing cursor animation */
+    .typing-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: #fc6500;
+      margin-left: 2px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .dashboard-preview {
+      background: #2a3542;
+      border: 1px solid #fc6500;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      white-space: pre;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="main.html">Home</a></li>
+      <li><a href="Resourses.html">Resources</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <h1>MAIA AI</h1>
+  <p class="subtitle">Martian Artificial Intelligence Assistant for Recycling & 3D Printing</p>
+  
+  <div class="chat-container">
+    <div class="chat-messages" id="chatMessages">
+      <div class="message ai-message">
+        Hello! I'm MAIA, your AI recycling assistant for Mars missions. I can help with 3D printing, material recycling, creative reuse ideas, and our circular resource dashboard. How can I assist you today?
+      </div>
+    </div>
+    
+    <div class="chat-input-container">
+      <!-- File Upload Button -->
+      <div class="upload-area">
+        <button class="file-upload-btn" onclick="document.getElementById('fileInput').click()" title="Upload 3D model or image">📎</button>
+        <input type="file" id="fileInput" style="display: none" accept=".stl,.obj,.3mf,.jpg,.jpeg,.png,.gcode" onchange="handleFileUpload(this.files)">
+        <div id="fileInfo" class="file-info"></div>
+        <img id="filePreview" class="file-preview" alt="File preview">
+        <div id="uploadStatus" class="upload-status"></div>
+      </div>
+
+      <!-- Chat Input -->
+      <input type="text" class="chat-input" id="chatInput" placeholder="Ask about 3D printing, recycling, or materials..." onkeypress="handleKeyPress(event)">
+      <button class="send-button" id="sendButton" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <div id="errorMessage" class="error-message"></div>
+
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-title">Smart Recycling</div>
+      <div class="feature-desc">AI-powered material identification and sorting</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🖨️</div>
+      <div class="feature-title">3D Printing</div>
+      <div class="feature-desc">Transform waste into printable filament and objects</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-title">AI Optimization</div>
+      <div class="feature-desc">Optimize processes for energy and resource efficiency</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Resource Dashboard</div>
+      <div class="feature-desc">Track circular resource cycle and efficiency</div>
+    </div>
+  </div>
+
+  <footer>
+    <p>MAIA AI - Martian Artificial Intelligence Assistant | Zero Waste, Maximum Morale</p>
+  </footer>
+
+  <script>
+    let isProcessing = false;
+    let currentFile = null;
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter' && !isProcessing) {
+        sendMessage();
+      }
+    }
+
+    function handleFileUpload(files) {
+      if (files.length === 0) return;
+      
+      const file = files[0];
+      currentFile = file;
+      
+      const fileInfo = document.getElementById('fileInfo');
+      const filePreview = document.getElementById('filePreview');
+      const uploadStatus = document.getElementById('uploadStatus');
+      
+      // Display file info
+      fileInfo.textContent = `${file.name} (${formatFileSize(file.size)})`;
+      
+      // Show preview for images
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          filePreview.src = e.target.result;
+          filePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        filePreview.style.display = 'none';
+      }
+      
+      // Show upload status
+      uploadStatus.textContent = 'File ready for analysis';
+      uploadStatus.style.display = 'block';
+      
+      // Auto-send analysis request for 3D files
+      if (file.name.toLowerCase().endsWith('.stl') || 
+          file.name.toLowerCase().endsWith('.obj') ||
+          file.name.toLowerCase().endsWith('.3mf')) {
+        setTimeout(() => {
+          sendFileAnalysis(file);
+        }, 1000);
+      }
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function sendFileAnalysis(file) {
+      if (isProcessing) return;
+      
+      isProcessing = true;
+      const sendButton = document.getElementById("sendButton");
+      sendButton.disabled = true;
+      
+      const userMessage = `I've uploaded a 3D model: ${file.name}. Can you analyze it for recycling potential and suggest how to print it?`;
+      addMessage(userMessage, 'user');
+      
+      showTypingIndicator();
+      
+      setTimeout(() => {
+        removeTypingIndicator();
+        
+        const analysisResponses = [
+          `I've analyzed your 3D model "${file.name}". This appears to be a good candidate for recycled polymer printing. I recommend using shredded polyethylene filament with a 0.2mm layer height for optimal results on Mars.`,
+          `Based on my analysis of "${file.name}", this design is well-suited for our recycling system. I suggest using a 20% regolith composite filament for added strength in Martian conditions.`,
+          `Your 3D model "${file.name}" has been analyzed. The geometry is compatible with our recycled material extrusion system. I recommend printing with carbon-infused polymer for enhanced durability.`
+        ];
+        
+        const response = analysisResponses[Math.floor(Math.random() * analysisResponses.length)];
+        typeMessage(response, 'ai');
+        
+        isProcessing = false;
+        sendButton.disabled = false;
+        
+        // Clear file after analysis
+        clearFileUpload();
+      }, 2000);
+    }
+
+    function clearFileUpload() {
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileInfo').textContent = '';
+      document.getElementById('filePreview').style.display = 'none';
+      document.getElementById('uploadStatus').style.display = 'none';
+      currentFile = null;
+    }
+
+    async function sendMessage() {
+        if (isProcessing) return;
+        
+        const input = document.getElementById("chatInput");
+        const message = input.value.trim();
+        const sendButton = document.getElementById("sendButton");
+        
+        if (message === "") return;
+        
+        isProcessing = true;
+        sendButton.disabled = true;
+        document.getElementById('errorMessage').textContent = '';
+        
+        // Add user message to chat
+        addMessage(message, 'user');
+        input.value = '';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Use local fallback responses immediately (skip API call)
+        setTimeout(() => {
+            removeTypingIndicator();
+            
+            // Use local fallback responses
+            const fallbackResponse = generateFallbackResponse(message);
+            if (fallbackResponse.dashboard) {
+                addMessageWithDashboard(fallbackResponse, 'ai');
+            } else {
+                typeMessage(fallbackResponse.text, 'ai');
+            }
+            
+            isProcessing = false;
+            sendButton.disabled = false;
+        }, 1500);
+    }
+
+    function generateFallbackResponse(message) {
+        const lowerMessage = message.toLowerCase().trim();
+        
+        console.log("Processing message:", lowerMessage);
+        
+        // Dashboard Responses - EXACT MATCHES FIRST
+        const dashboardExactMatches = [
+            'dashboard',
+            'status',
+            'tracking',
+            'show dashboard',
+            'show me the dashboard',
+            'open dashboard',
+            'resource status',
+            'system status',
+            'recycling status'
+        ];
+        
+        const dashboardKeywords = [
+            'dashboard',
+            'track',
+            'resource',
+            'circular',
+            'monitor',
+            'status',
+            'progress',
+            'metrics',
+            'statistics'
+        ];
+        
+        // Check exact matches first
+        if (dashboardExactMatches.includes(lowerMessage)) {
+            console.log("Exact dashboard match found");
+            return getDashboardResponse();
+        }
+        
+        // Check for keyword matches
+        for (const keyword of dashboardKeywords) {
+            if (lowerMessage.includes(keyword)) {
+                console.log("Dashboard keyword match:", keyword);
+                return getDashboardResponse();
+            }
+        }
+        
+        // 3D Printing Responses
+        if (lowerMessage.includes('3d') || lowerMessage.includes('print')) {
+            const responses = [
+                "For 3D printing on Mars, I transform waste polymers into high-quality filament through shredding, plasma treatment, and extrusion processes optimized for Martian conditions.",
+                "I can help you create 3D printed objects from recycled materials! The process involves material identification, shredding, and filament creation with Mars-optimized settings.",
+                "3D printing from recycled materials is essential for Mars sustainability. I can process common habitat waste into new filament with comparable quality to virgin material."
+            ];
+            return { text: responses[Math.floor(Math.random() * responses.length)] };
+        }
+        
+        // Recycling Responses
+        if (lowerMessage.includes('recycle') || lowerMessage.includes('waste')) {
+            const responses = [
+                "My recycling system uses computer vision to identify materials and assign them to optimal processing paths - shredding, plasma treatment, or weaving for maximum efficiency.",
+                "I maintain a closed-loop recycling system where every material is tracked and reused. This ensures zero waste while creating useful products from recycled materials.",
+                "On Mars, recycling is essential for survival. I optimize processes to use minimal energy while transforming waste into valuable habitat resources."
+            ];
+            return { text: responses[Math.floor(Math.random() * responses.length)] };
+        }
+        
+        // Material Responses
+        if (lowerMessage.includes('material') || lowerMessage.includes('plastic') || lowerMessage.includes('aluminum')) {
+            const responses = [
+                "I work with various materials: polymers for 3D printing, aluminum for structural components, textiles for weaving, and foams for insulation - each with optimized recycling pathways.",
+                "Material identification is key to my process. I classify materials and determine the best recycling method for maximum resource recovery on Mars.",
+                "Common materials I recycle include food packaging (3D filament), aluminum frames (tools), textile waste (cordage), and foam insulation (composite filler)."
+            ];
+            return { text: responses[Math.floor(Math.random() * responses.length)] };
+        }
+        
+        // Technical/How-to Responses
+        if (lowerMessage.includes('how') || lowerMessage.includes('make') || lowerMessage.includes('create')) {
+            const responses = [
+                "I can guide you through creating items from recycled materials! For example, to make a tool handle: 1) Collect suitable polymers, 2) Shred and clean the material, 3) Extrude into filament, 4) 3D print using my optimized parameters, 5) Post-process for strength. The entire process takes about 3 hours.",
+                "Let me help you create something! First, tell me what you need - tools, decorations, or functional items. I'll identify available materials, calculate the optimal process, and guide you through each step. My systems can even operate autonomously if you're busy with other tasks.",
+                "Creating from recycled materials is straightforward with my guidance. I handle the complex calculations for material compatibility, energy requirements, and process optimization. You just need to provide the waste materials and tell me what you'd like to create!"
+            ];
+            return { text: responses[Math.floor(Math.random() * responses.length)] };
+        }
+        
+        // Default responses
+        const defaultResponses = [
+            "I'm MAIA, your AI recycling assistant for Mars. I can help with 3D printing processes, material recycling, creative reuse ideas, or show you our resource dashboard. What would you like to know?",
+            "As your Mars habitat assistant, I specialize in transforming waste into valuable resources through smart recycling and 3D printing technologies. I also maintain our circular resource dashboard.",
+            "I'm here to help with recycling systems, manufacturing, and resource tracking on Mars. You can ask me about material processing, 3D printing, creative repurposing, or our monitoring dashboard."
+        ];
+        
+        return { text: defaultResponses[Math.floor(Math.random() * defaultResponses.length)] };
+    }
+
+    function getDashboardResponse() {
+        const responses = [
+            {
+                text: "Here's our current resource dashboard status:",
+                dashboard: `
+📊 MAIA RESOURCE DASHBOARD - SOL 284
+┌─────────────────────────────────────┐
+│ MATERIAL FLOW STATUS                │
+├─────────────────────────────────────┤
+│ 🟢 Polymers: 12.5kg available       │
+│   → 3D filament: 8.2kg ready        │
+│   → Composite pellets: 4.3kg        │
+│ 🟡 Aluminum: 3.1kg available        │
+│   → Tool stock: 2.8kg               │
+│   → Structural: 0.3kg               │
+│ 🔴 Textiles: 0.8kg (LOW)            │
+│   → Cordage: 0.5kg                  │
+│   → Insulation: 0.3kg               │
+├─────────────────────────────────────┤
+│ RECYCLING EFFICIENCY: 94%           │
+│ WASTE PROCESSED: 28.3kg this cycle  │
+│ NEW ITEMS CREATED: 47 units         │
+└─────────────────────────────────────┘
+                `
+            },
+            {
+                text: "Current recycling dashboard metrics:",
+                dashboard: `
+🔄 CIRCULAR ECONOMY DASHBOARD
+┌─────────────────────────────────────┐
+│ PROCESSED THIS WEEK                 │
+├─────────────────────────────────────┤
+│ ♻️ Waste Input: 15.2kg              │
+│   • Food packaging: 4.8kg           │
+│   • Broken tools: 3.1kg             │
+│   • Textile waste: 2.3kg            │
+│   • Mixed polymers: 5.0kg           │
+│ 🏭 Output Produced:                 │
+│   • Habitat panels: 8 units         │
+│   • Tool handles: 12 units          │
+│   • Storage containers: 6 units     │
+│   • Decorative items: 4 units       │
+├─────────────────────────────────────┤
+│ RESOURCE DISTRIBUTION               │
+│ Lab Module: 45% | Living: 30%       │
+│ Green Module: 15% | Storage: 10%    │
+└─────────────────────────────────────┘
+                `
+            },
+            {
+                text: "Real-time resource tracking dashboard:",
+                dashboard: `
+🎯 RESOURCE INTELLIGENCE PLATFORM
+┌─────────────────────────────────────┐
+│ LIVE MATERIAL TRACKING              │
+├─────────────────────────────────────┤
+│ POLYMER STREAM                      │
+│ ████████████ 85% Shredded           │
+│ ████████ 62% Plasma treated         │
+│ █████ 42% Extruded to filament      │
+│                                     │
+│ METAL RECOVERY                      │
+│ ██████████ 78% Aluminum melted      │
+│ ███████ 55% Tool frames cast        │
+│                                     │
+│ TEXTILE REPURPOSING                 │
+│ ██████ 45% Woven to cordage         │
+│ ███ 28% Composite reinforcement     │
+├─────────────────────────────────────┤
+│ PREDICTED SUPPLY: 18 sols remaining │
+│ RECOMMENDATION: Process textiles    │
+└─────────────────────────────────────┘
+                `
+            }
+        ];
+        return responses[Math.floor(Math.random() * responses.length)];
+    }
+
+    function addMessage(text, sender) {
+        const chatMessages = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}-message`;
+        messageDiv.textContent = text;
+        chatMessages.appendChild(messageDiv);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addMessageWithDashboard(response, sender) {
+        const chatMessages = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}-message`;
+        
+        // Add the text part
+        const textDiv = document.createElement("div");
+        textDiv.textContent = response.text;
+        messageDiv.appendChild(textDiv);
+        
+        // Add dashboard if it exists
+        if (response.dashboard) {
+            const dashboardDiv = document.createElement("div");
+            dashboardDiv.className = "dashboard-preview";
+            dashboardDiv.textContent = response.dashboard;
+            messageDiv.appendChild(dashboardDiv);
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function typeMessage(text, sender) {
+        const chatMessages = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}-message`;
+        
+        // Add cursor to show typing is happening
+        const cursorSpan = document.createElement("span");
+        cursorSpan.className = "typing-cursor";
+        messageDiv.appendChild(cursorSpan);
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        let i = 0;
+        const speed = 20; // typing speed in milliseconds
+        
+        function typeWriter() {
+            if (i < text.length) {
+                // Remove cursor
+                if (cursorSpan.parentNode) {
+                    cursorSpan.parentNode.removeChild(cursorSpan);
+                }
+                
+                // Add text character by character
+                messageDiv.textContent = text.substring(0, i + 1);
+                
+                // Add cursor back at the end
+                messageDiv.appendChild(cursorSpan);
+                
+                i++;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                setTimeout(typeWriter, speed);
+            } else {
+                // Remove cursor when typing is complete
+                if (cursorSpan.parentNode) {
+                    cursorSpan.parentNode.removeChild(cursorSpan);
+                }
+                messageDiv.textContent = text;
+            }
+        }
+        
+        typeWriter();
+    }
+
+    function showTypingIndicator() {
+        const chatMessages = document.getElementById("chatMessages");
+        const typingDiv = document.createElement("div");
+        typingDiv.className = "typing-indicator";
+        typingDiv.id = "typingIndicator";
+        typingDiv.innerHTML = "MAIA is thinking<span>.</span><span>.</span><span>.</span>";
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        const typingIndicator = document.getElementById("typingIndicator");
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+  </script>
+</body>
+</html>

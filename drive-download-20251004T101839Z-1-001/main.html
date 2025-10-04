@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="maia-removebg-preview.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mars - Axiom Space</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #0a0d1a, #000);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      position: relative;
+    }
+
+    nav .logo {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #ff5733;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 80px 100px;
+    }
+
+    .hero-text {
+      max-width: 500px;
+    }
+
+    .hero-text h3 {
+      letter-spacing: 5px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      font-weight: lighter;
+    }
+
+    .hero-text h1 {
+      font-size: 90px;
+      font-weight: bold;
+      letter-spacing: 15px;
+      color: white;
+      text-shadow: 0 0 20px rgba(255,255,255,0.7);
+    }
+
+    .hero-text h4 {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .hero-text p {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-primary {
+      background: white;
+      color: black;
+    }
+
+    .btn-primary:hover {
+      background: #ddd;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      color: black;
+    }
+
+    /* Mars Image */
+    .hero img {
+      width: 500px;
+      border-radius: 50%;
+    }
+
+    @media(max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+      .hero img {
+        margin-top: 40px;
+        width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">MAIA — Martian Artificial Intelligence Assistant</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="Resourses.html">Resourses</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h3>PLANET</h3>
+      <h1>MARS</h1>
+      <h4>BECOME A MARTIAN</h4>
+      <p>
+        An AI-powered recycling & creativity companion for astronauts on Mars
+      </p>
+      <div class="buttons">
+        <a href="new.html" class="btn btn-primary">Start</a>
+      </div>
+    </div>
+    <img src="image.png" alt="Planet Mars">
+  </section>
+
+</body>
+</html>
